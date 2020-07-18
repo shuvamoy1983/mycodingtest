@@ -8,7 +8,7 @@ import org.example.Utils.helperClass._
 
 import scala.io.Source
 
-object mytest {
+object scalaTest {
 
 
   def main(args: Array[String]): Unit = {
@@ -47,10 +47,10 @@ object mytest {
     val Cotton=keyJoin(WorldCottonData,UsCottonData)
 
 
-    val rsltForBarley=Barley.map(p=> (p._1,p._2._1,((p._2._2).toString.toDouble/(p._2._1).toString.toDouble)*100))
-    val rsltForBeef=Beef.map(p=> (p._1,p._2._1,((p._2._2).toString.toDouble/(p._2._1).toString.toDouble)*100))
-    val rsltForCorn=Corn.map(p=> (p._1,p._2._1,((p._2._2).toString.toDouble/(p._2._1).toString.toDouble)*100))
-    val rsltForCotton=Cotton.map(p=> (p._1,p._2._1,((p._2._2).toString.toDouble/(p._2._1).toString.toDouble)*100))
+    val rsltForBarley=Barley.map(Bar=> (Bar._1,Bar._2._1,((Bar._2._2).toString.toDouble/(Bar._2._1).toString.toDouble)*100))
+    val rsltForBeef=Beef.map(Bee=> (Bee._1,Bee._2._1,((Bee._2._2).toString.toDouble/(Bee._2._1).toString.toDouble)*100))
+    val rsltForCorn=Corn.map(Cor=> (Cor._1,Cor._2._1,((Cor._2._2).toString.toDouble/(Cor._2._1).toString.toDouble)*100))
+    val rsltForCotton=Cotton.map(Cot=> (Cot._1,Cot._2._1,((Cot._2._2).toString.toDouble/(Cot._2._1).toString.toDouble)*100))
 
 
   // Write to a file, currently dealing with 4 files.
@@ -60,18 +60,17 @@ object mytest {
     writer.write("Year|world_Barley_harvest|usa_Barley_contribution%|Year|world_Beef_Slaughter|usa_Beef_Slaugter_contribution%|Year|world_Corn_harvest|usa_Corn_contribution%|world_Cotton_harvest|usa_Cotton_contribution%\n")
     // group on keys and print
     List(rsltForBarley,rsltForBeef,rsltForCorn,rsltForCotton).flatten.groupBy(_._1).toSeq.sortBy(_._1).map(p=> {
-      p._2.foreach(d=> {
+      p._2.foreach(out=> {
 
           if (cnt< 4 ) {
-            writer.write(s"""${d._1}|${d._2}|${infinityChk(d._3)}|""")
+            writer.write(s"""${out._1}|${out._2}|${infinityChk(out._3)}|""")
             cnt = cnt + 1
           }
           else {
             writer.newLine()
-            writer.write(s"""${d._1}|${d._2}|${infinityChk(d._3)}|""")
+            writer.write(s"""${out._1}|${out._2}|${infinityChk(out._3)}|""")
             cnt=1
           }
-
 
       })
 
