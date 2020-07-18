@@ -28,17 +28,23 @@ object sparkTest {
 
     val WorldCornData=Corn(readCsvFileInSpark(CornInfo.getString("WorldCornInfo")))
     val UsCornData=Corn(readCsvFileInSpark(CornInfo.getString("UsCornInfo")))
+    val CornData=mergeOnCornAndCompute(WorldCornData,UsCornData)
 
 
-    val WorldCottonData=Cotton(readCsvFileInSpark(CottonInfo.getString("UsCottonInfo")))
-    val UsCottonData=Cotton(readCsvFileInSpark(CottonInfo.getString("WorldCottonInfo")))
+    val WorldCottonData=Cotton(readCsvFileInSpark(CottonInfo.getString("WorldCottonInfo")))
+    val UsCottonData=Cotton(readCsvFileInSpark(CottonInfo.getString("UsCottonInfo")))
+    val CottonData=mergeOnCottonAndCompute(WorldCottonData,UsCottonData)
 
 
-    val p=BeefData
-    p.show()
+    //world_barley_harvest|US_barley_contribution|world_beef_slaughter|US_beef_Slaughter_contribution|world_corn_harvest|US_corn_contribution|world_cotton_harvest|US_cotton_contribution
 
+    val otpt=BarleyData
+      .join(BeefData,"ID")
+      .join(CornData,"ID")
+      .join(CottonData,"ID")
+        .drop("ID")
 
-
+    otpt.write.mode("overwrite").option("header","true").option("delimiter","|").csv("/home/slave/Desktop/src/spark.csv")
 
 
   }

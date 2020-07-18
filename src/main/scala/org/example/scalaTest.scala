@@ -55,7 +55,7 @@ object scalaTest {
 
   // Write to a file, currently dealing with 4 files.
 
-    val file="/home/slave/Desktop/src/file.txt"
+    val file="/home/slave/Desktop/src/outputForScala.txt"
     val writer = new BufferedWriter(new FileWriter(file))
     writer.write("Year|world_Barley_harvest|usa_Barley_contribution%|Year|world_Beef_Slaughter|usa_Beef_Slaugter_contribution%|Year|world_Corn_harvest|usa_Corn_contribution%|world_Cotton_harvest|usa_Cotton_contribution%\n")
     // group on keys and print

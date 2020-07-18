@@ -41,12 +41,7 @@ object TransformAndProcess {
       trim(col("harvest")).as("harvest"))
 
   }
-  getSparkSession.udf.register(
-    "pgender",
-    (s: String) =>
-      if (List("f", "female", "woman").contains(s.toLowerCase)) "Female"
-      else "Male"
-  )
+
 
   def mergeOnBarleyAndCompute(dataFrame1: DataFrame,dataFrame2: DataFrame): DataFrame={
     val df=dataFrame1.join(dataFrame2, "ID")
@@ -69,11 +64,40 @@ object TransformAndProcess {
         dataFrame2("Slaughter"),
         dataFrame1("Slaughter").cast("Double").as("world_beef_slaughter"),
         matchpattern(dataFrame2("Slaughter")).cast("Double").as("US_beef_slaughter")
-      )
+      ).drop("year")
 
     val rslt=df.withColumn("US_beef_Slaughter_contribution",
       (df("US_beef_slaughter")/df("world_beef_slaughter"))*100)
       .drop("US_beef_slaughter").drop("Slaughter")
+    rslt
+  }
+
+
+  def mergeOnCornAndCompute(dataFrame1: DataFrame,dataFrame2: DataFrame): DataFrame={
+    val df=dataFrame1.join(dataFrame2, "ID")
+      .select(dataFrame1("ID"),
+        dataFrame1("year"),
+        dataFrame1("harvest").cast("Double").as("world_corn_harvest"),
+        dataFrame2("harvest").cast("Double").as("US_corn_harvest")
+      ).drop("year")
+
+    val rslt=df.withColumn("US_corn_contribution",
+      (df("US_corn_harvest")/df("world_corn_harvest"))*100)
+      .drop("US_corn_harvest")
+    rslt
+  }
+
+  def mergeOnCottonAndCompute(dataFrame1: DataFrame,dataFrame2: DataFrame): DataFrame={
+    val df=dataFrame1.join(dataFrame2, "ID")
+      .select(dataFrame1("ID"),
+        dataFrame1("year"),
+        dataFrame1("harvest").cast("Double").as("world_cotton_harvest"),
+        dataFrame2("harvest").cast("Double").as("US_cotton_harvest")
+      ).drop("year")
+
+    val rslt=df.withColumn("US_cotton_contribution",
+      (df("US_cotton_harvest")/df("world_cotton_harvest"))*100)
+      .drop("US_cotton_harvest")
     rslt
   }
 }
