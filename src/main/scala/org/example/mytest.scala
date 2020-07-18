@@ -13,9 +13,6 @@ object mytest {
 
   def main(args: Array[String]): Unit = {
 
-
-    var outputForCorn : String=""
-    var outputForCotton : String=""
     var cnt=0
     // Load the propertis file to get the resource
     val config = ConfigFactory.load("application.conf").getConfig("resourceFile")
@@ -23,19 +20,8 @@ object mytest {
     val CottonInfo = config.getConfig("Cotton")
     val BarleyInfo = config.getConfig("Barley")
     val BeefInfo = config.getConfig("Beef")
-    val WheetInfo = config.getConfig("Wheet")
 
-   /* val data= scala.io.Source.fromFile(BeefInfo.getString("UsBeefInfo"))
-    val data1= scala.io.Source.fromFile(BeefInfo.getString("WorldBeefInfo"))
 
-   val o=data.getLines().drop(1).map(p=>p.split(","))
-    val j=data1.getLines().drop(1).map(p=>p.split(","))
-    val l=o.map(p=>
-      (p(0),matchPattern(p(1).trim()))).toMap
-    print(manOf(l))
-
-    println(j.map(p=>
-      (p(0),matchPattern(p(1).trim()))).toMap) */
 
     //get the Barley data Info
     val UsBarleyData=selectFields(removeHeaderandSplit(readFile(BarleyInfo.getString("UsBarleyInfo"))))
